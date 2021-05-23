@@ -1,12 +1,10 @@
- let stringcarinfo="Prius,2017,red,automatic,y,y,y,n,n,y,10000#Ionic,2020,blue,automatic,y,y,y,y,y,y,13000#Audi,2013,gray,manual,y,y,n,n,n,n,7500#Golf,1995,black,manual,n,n,n,n,n,n,2100#Kia,2007,white,automatic,n,y,n,n,n,n,5300#Mercedes,1998,silver,automatic,y,y,y,n,n,n,8600";
+ let stringcarinfo="Prius,2017,red,automatic,y,y,y,n,n,y,10000#Ionic,2020,blue,automatic,y,y,y,y,y,y,13000#Golf,1995,black,manual,n,n,n,n,n,n,2100#Kia,2007,white,automatic,n,y,n,n,n,n,5300#Mercedes,1998,silver,automatic,y,y,y,n,n,n,8600#Audi,2013,gray,manual,y,y,n,n,n,n,7500";
  function car(string){
    let  stringtoarray=string.split("#");
   let arraynew=stringtoarray.map(a =>a.split(","));
     function torepplace(array){
     return array.map(a => a.map(b => (b=="n")?"no":(b=="y")?"yes":b));
     };
-   
-   
 let emptyarray=[];  
 // for(let i=0;i<torepplace(arraynew).length;i++){
     
@@ -35,24 +33,35 @@ let emptyarray=[];
   
     function calcprice(array){
     return array.map(function total(value) {
-      let carModel,transmission,ac,electricwindows,sunroof,autopark,cruisecontrol;
-      (value.Model>=2015)?carModel=0.1:(value.Model>=2010&&value.Model<=2014)?carmode=0.08:
+      let carModel,transmission,ac,electricwindows,sunroof,autopark,cruisecontrol,electricmirror;
+      (value.Model>=2015)?carModel=0.1:(value.Model>=2010&&value.Model<=2014)?carModel=0.08:
       (value.Model>=2005&&value.Model<=2009)?carModel=0.06:(value.Model>=2000&&value.Model<=2004)?carModel=0.04:
-      (value.Model<=1999)?carModel=0.02:carModel=0;
-      transmission=(value.Transmission=="automatic")?0.03:false;
+      (value.Model<=1999)?carModel=0.02:false;
       ac=(value.Features["AC"]=="yes")?0.05:false;
       electricwindows=(value.Features["Electric Windows"]=="yes")?0.08:false;
       sunroof=(value.Features.Sunroof=="yes")?0.07:false;
-      autopark=(value.Features["Auto-park"])?0.05:false;
-      cruisecontrol=(value.Features["Cruise Control"])?0.04:false;
+      transmission=(value.Transmission=="automatic")?0.03:false;
+      autopark=(value.Features["Auto-park"]=="yes")?0.05:false;
+      cruisecontrol=(value.Features["Cruise Control"]=="yes")?0.04:false;
+      electricmirror=(value.Features["Electric Mirrors"]=="yes")?0.06:false;
 
-      let totalprice=+value.Features.Price;
+      let totalprice=Number(value.Features.Price);
       return  value.Features.Price=totalprice+totalprice*carModel+transmission*totalprice+totalprice*ac
-      +totalprice*electricwindows+totalprice*sunroof+totalprice*autopark+totalprice*cruisecontrol,value})
+      +totalprice*electricwindows+totalprice*sunroof+totalprice*autopark+totalprice*cruisecontrol+totalprice*electricmirror,value})
       
     };
+    function sort(array){
+      array.sort((a,b) => {return b.Features.Price-a.Features.Price});
+      return array;
+    }
  torepplace(arraynew);
- return calcprice(emptyarray);
+calcprice(emptyarray);
+sort(emptyarray);
+ return emptyarray;
 }
+// function sort(array){
+//   array.sort((a,b) => {return b.Features.Price-a.Features.Price});
+//   return array;
+// }
  console.log(car(stringcarinfo));
  
